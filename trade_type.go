@@ -523,8 +523,20 @@ func (this *TradePayRsp) IsSuccess() bool {
 // TradeAppPay App支付接口请求参数 https://docs.open.alipay.com/api_1/alipay.trade.app.pay/
 type TradeAppPay struct {
 	Trade
-	TimeExpire  string         `json:"time_expire,omitempty"`  // 绝对超时时间，格式为yyyy-MM-dd HH:mm。
-	GoodsDetail []*GoodsDetail `json:"goods_detail,omitempty"` // 订单包含的商品列表信息，Json格式，详见商品明细说明
+	TimeExpire          string                        `json:"time_expire,omitempty"`           // 绝对超时时间，格式为yyyy-MM-dd HH:mm。
+	GoodsDetail         []*GoodsDetail                `json:"goods_detail,omitempty"`          // 订单包含的商品列表信息，Json格式，详见商品明细说明
+	AgreementSignParams *TradeAppPayAgreementPageSign `json:"agreement_sign_params,omitempty"` // 协议参数，如果订单中没有协议参数，则不要传这个字段。
+}
+
+type TradeAppPayAgreementPageSign struct {
+	PersonalProductCode string             `json:"personal_product_code,omitempty"` // 个人签约产品码，商户和支付宝签约时确定，商户可咨询技 术支持
+	SignScene           string             `json:"sign_scene,omitempty"`            // 协议签约场景，商户和支付宝 签约时确定，商户可咨询技术支持。当传入商户签约号external_agreement_no时，场景不能为默认值DEFAULT|DEFAULT
+	ExternalAgreementNo string             `json:"external_agreement_no,omitempty"` // 商户签约号，代扣协议中标示 用户的唯一签约号（确保在商 户系统中唯一）。
+	ExternalLogonId     string             `json:"external_logon_id,omitempty"`     // 用户在商户网站的登录账号，用于在签约页面展示，如果为空，则不展示
+	AccessParams        *AccessParams      `json:"access_params,omitempty"`
+	SubMerchantParams   *SubMerchantParams `json:"sub_merchant_params,omitempty"`
+	PeriodRuleParams    *PeriodRuleParams  `json:"period_rule_params,omitempty"`
+	SignNotifyURL       string             `json:"sign_notify_url,omitempty"` // 协议签约成功回调地址
 }
 
 func (this TradeAppPay) APIName() string {
